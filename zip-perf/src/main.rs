@@ -81,7 +81,7 @@ fn zip_1(n: usize) -> (f64, u128) {
     let timer = Instant::now();
     let mut sum = 0.;
     for (a1, (b1, (c1, (d1, u1)))) in z {
-        *u1 = sum;
+        *u1 += sum;
         sum += a1 + b1 + c1 + d1 + *u1;
     }
     let dur = timer.elapsed().as_nanos();
@@ -108,7 +108,7 @@ fn zip_2(n: usize) -> (f64, u128) {
     let timer = Instant::now();
     let mut sum = 0.;
     for ((((a1, b1), c1), d1), u1) in z {
-        *u1 = sum;
+        *u1 += sum;
         sum += a1 + b1 + c1 + d1 + *u1;
     }
     let dur = timer.elapsed().as_nanos();
