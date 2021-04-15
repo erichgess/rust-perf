@@ -4,7 +4,7 @@ use rand::random;
 
 fn main() {
     // array sizes
-    let sizes = [100, 1000, 10_000];
+    let sizes = [100, 1000, 10_000, 100_000, 1_000_000];
     let last = sizes.last().unwrap();
     // Prime the heap so performance isn't impacted by syscalls
     prime_heap(*last);
