@@ -7,6 +7,8 @@ fn main() {
 
     let mut zip_1_dur: HashMap<usize, Vec<u128>> = HashMap::new();
     let mut zip_2_dur: HashMap<usize, Vec<u128>> = HashMap::new();
+
+    // Run zip_1 and zip_2 10 times for each array size
     let runs = 10;
 
     for i in &[100, 1000, 10_000, 100_000] {
@@ -23,6 +25,7 @@ fn main() {
 
     // Print average times for each step
     for i in &[100, 1000, 10_000, 100_000] {
+        // Compute the average duration across the `runs`
         let sum_1: u128 = zip_1_dur.get(i).map(|v| v.iter().sum()).unwrap();
         let sum_2: u128 = zip_2_dur.get(i).map(|v| v.iter().sum()).unwrap();
 
