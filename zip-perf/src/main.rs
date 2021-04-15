@@ -68,17 +68,21 @@ fn zip_1(n: usize) -> (f64, u128) {
     let mut b = vec![1.; n];
     let mut c = vec![1.; n];
     let mut d = vec![1.; n];
+    let mut u = vec![1.; n];
 
     fill_random(&mut a);
     fill_random(&mut b);
     fill_random(&mut c);
     fill_random(&mut d);
+    fill_random(&mut u);
 
-    let z = a.iter().zip(b.iter().zip(c.iter().zip(d.iter())));
+    let ui = u.iter_mut();
+    let z = a.iter().zip(b.iter().zip(c.iter().zip(d.iter().zip(ui))));
     let timer = Instant::now();
     let mut sum = 0.;
-    for (a1, (b1, (c1, d1))) in z {
-        sum += a1 + b1 + c1 + d1;
+    for (a1, (b1, (c1, (d1, u1)))) in z {
+        *u1 = sum;
+        sum += a1 + b1 + c1 + d1 + *u1;
     }
     let dur = timer.elapsed().as_nanos();
 
@@ -90,17 +94,22 @@ fn zip_2(n: usize) -> (f64, u128) {
     let mut b = vec![1.; n];
     let mut c = vec![1.; n];
     let mut d = vec![1.; n];
+    let mut u = vec![1.; n];
 
     fill_random(&mut a);
     fill_random(&mut b);
     fill_random(&mut c);
     fill_random(&mut d);
+    fill_random(&mut u);
 
-    let z = a.iter().zip(b.iter()).zip(c.iter()).zip(d.iter());
+    let ui = u.iter_mut();
+
+    let z = a.iter().zip(b.iter()).zip(c.iter()).zip(d.iter()).zip(ui);
     let timer = Instant::now();
     let mut sum = 0.;
-    for (((a1, b1), c1), d1) in z {
-        sum += a1 + b1 + c1 + d1;
+    for ((((a1, b1), c1), d1), u1) in z {
+        *u1 = sum;
+        sum += a1 + b1 + c1 + d1 + *u1;
     }
     let dur = timer.elapsed().as_nanos();
 
