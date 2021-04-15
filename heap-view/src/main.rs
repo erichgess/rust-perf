@@ -1,7 +1,11 @@
 use std::time::Instant;
+use std::mem;
 
 fn main() {
     for i in &[1000 as usize, 10_000, 100_000, 1_000_000, 10_000_000] {
+        let total_bytes = i * mem::size_of::<f64>();
+        let kb = total_bytes / 1024;
+        println!("{} KiB of Data", kb);
         bounce(*i);
         skipper_sum(*i);
         linear_sum(*i);
