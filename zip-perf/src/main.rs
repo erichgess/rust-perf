@@ -1,17 +1,19 @@
 use std::{collections::HashMap, time::Instant};
 
 fn main() {
+    // array sizes
+    let sizes = [100, 1000, 10_000, 100_000, 1_000_000];
+    let last = sizes.last().unwrap();
     // Prime the heap so performance isn't impacted by syscalls
-    zip_1(100_000);
-    zip_2(100_000);
+    prime_heap(*last);
 
     let mut zip_1_dur: HashMap<usize, Vec<u128>> = HashMap::new();
     let mut zip_2_dur: HashMap<usize, Vec<u128>> = HashMap::new();
 
     // Run zip_1 and zip_2 10 times for each array size
-    let runs = 10;
+    let runs = 20;
 
-    for i in &[100, 1000, 10_000, 100_000] {
+    for i in &[100, 1000, 10_000, 100_000, 1_000_000] {
         zip_1_dur.insert(*i, vec![]);
         zip_2_dur.insert(*i, vec![]);
         for _ in 0..runs {
@@ -34,6 +36,11 @@ fn main() {
         println!("zip_2: {} ns", (sum_2 as f64) / (runs as f64));
         println!("---");
     }
+}
+
+fn prime_heap(sz: usize) -> usize {
+    let v = vec![0.; sz];
+    v.len()
 }
 
 fn zip_1(n: usize) -> (f64, u128) {
