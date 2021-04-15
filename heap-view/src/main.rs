@@ -1,10 +1,13 @@
 use std::time::Instant;
 
 fn main() {
-    linear_sum();
-    bounce();
-    skipper_sum();
-    linear_sum();
+    for i in &[1000 as usize, 10_000, 100_000, 1_000_000, 10_000_000] {
+        bounce(*i);
+        skipper_sum(*i);
+        linear_sum(*i);
+
+        println!("-----");
+    }
 }
 
 /// This sums the numbers in an array of 100,0000 64bit floats
@@ -13,8 +16,7 @@ fn main() {
 /// bytes of memory for each addition. Cache lines are generally
 /// 64 bytes in size, so this guarantees that each addition will
 /// hit a different cache line.
-fn skipper_sum() -> f64 {
-    let n = 100_000;
+fn skipper_sum(n: usize) -> f64 {
     let a = vec![1.; n];
     let mut sum = 0.;
 
@@ -34,8 +36,7 @@ fn skipper_sum() -> f64 {
 /// Sum 100,000 numbers all in a straight line.
 /// This will add all the numbers in a cacheline
 /// before moving to the next cacheline.
-fn linear_sum() -> f64 {
-    let n = 100_000;
+fn linear_sum(n: usize) -> f64 {
     let a = vec![1.; n];
     let mut sum = 0.;
 
@@ -59,8 +60,7 @@ fn linear_sum() -> f64 {
 /// traversed contiguously that the L1 cache is more than
 /// big enough to keep teh current cache line for both
 /// arrays.
-fn bounce() -> f64 {
-    let n = 100_000;
+fn bounce(n: usize) -> f64 {
     let n2 = n / 2;
     let a = vec![1.; n2];
     let b = vec![1.; n2];
