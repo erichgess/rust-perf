@@ -7,6 +7,12 @@ fn main() {
     linear_sum();
 }
 
+/// This sums the numbers in an array of 100,0000 64bit floats
+/// Rather than sum the contiguous line of numbers from 0 to
+/// 100,000; it does jumps of 10.  This will skip over 10*8=80
+/// bytes of memory for each addition. Cache lines are generally
+/// 64 bytes in size, so this guarantees that each addition will
+/// hit a different cache line.
 fn skipper_sum() -> f64 {
     let n = 100_000;
     let a = vec![1.; n];
@@ -20,38 +26,53 @@ fn skipper_sum() -> f64 {
         }
     }
     let d = time.elapsed().as_nanos();
-    println!("{} in {}ns", sum, d); /* */
+    println!("skiper: {} in {}ns", sum, d); /* */
 
     sum
 }
 
+/// Sum 100,000 numbers all in a straight line.
+/// This will add all the numbers in a cacheline
+/// before moving to the next cacheline.
 fn linear_sum() -> f64 {
-    let a = vec![1.; 100_000];
+    let n = 100_000;
+    let a = vec![1.; n];
     let mut sum = 0.;
 
     let time = Instant::now();
-    for i in 0..50_000 {
+    for i in 0..n {
         sum += a[i];
-        sum += a[i + 1];
     }
     let d = time.elapsed().as_nanos();
-    println!("{} in {}ns", sum, d); /* */
+    println!("linear: {} in {}ns", sum, d); /* */
 
     sum
 }
 
+/// This adds 100,0000 numbers that are stored
+/// in two different regions of memory.  It starts
+/// at the beginning of each array and moves through
+/// them at the same time.
+///
+/// I originally thought this would cause a lot of cache
+/// line misses, but I think because each array is
+/// traversed contiguously that the L1 cache is more than
+/// big enough to keep teh current cache line for both
+/// arrays.
 fn bounce() -> f64 {
-    let a = vec![1.; 50_000];
-    let b = vec![1.; 50_000];
+    let n = 100_000;
+    let a = vec![1.; n / 2];
+    let b = vec![1.; n / 2];
     let mut sum = 0.;
 
     let time = Instant::now();
-    for i in 0..100_000 / 2 {
+    let n2 = n / 2;
+    for i in 0..n2 {
         sum += a[i];
         sum += b[i];
     }
     let d = time.elapsed().as_nanos();
-    println!("{} in {}ns", sum, d); /* */
+    println!("bounce: {} in {}ns", sum, d); /* */
 
     sum
 }
