@@ -26,7 +26,7 @@ fn skipper_sum() -> f64 {
         }
     }
     let d = time.elapsed().as_nanos();
-    println!("skiper: {} in {}ns", sum, d); /* */
+    println!("skiper: {} in {} ns", sum, d); /* */
 
     sum
 }
@@ -44,7 +44,7 @@ fn linear_sum() -> f64 {
         sum += a[i];
     }
     let d = time.elapsed().as_nanos();
-    println!("linear: {} in {}ns", sum, d); /* */
+    println!("linear: {} in {} ns", sum, d); /* */
 
     sum
 }
@@ -61,18 +61,18 @@ fn linear_sum() -> f64 {
 /// arrays.
 fn bounce() -> f64 {
     let n = 100_000;
-    let a = vec![1.; n / 2];
-    let b = vec![1.; n / 2];
+    let n2 = n / 2;
+    let a = vec![1.; n2];
+    let b = vec![1.; n2];
     let mut sum = 0.;
 
     let time = Instant::now();
-    let n2 = n / 2;
     for i in 0..n2 {
         sum += a[i];
         sum += b[i];
     }
     let d = time.elapsed().as_nanos();
-    println!("bounce: {} in {}ns", sum, d); /* */
+    println!("bounce: {} in {} ns", sum, d); /* */
 
     sum
 }
