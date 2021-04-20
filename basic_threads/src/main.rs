@@ -1,3 +1,5 @@
+extern crate core_affinity;
+
 use std::thread;
 use std::time::Instant;
 
@@ -18,7 +20,7 @@ struct TestSet {
 
 fn main() {
     print_test_set_header();
-    let tests = [5_000_000, 50_000_000, 500_000_000];
+    let tests = [5_000_000, 50_000_000];
 
     for loops in &tests {
         for threads in 1..=8 {
@@ -58,13 +60,23 @@ fn print_test_set(test: usize, ty: &str, tests: &TestSet) {
 }
 
 fn n_threads(num_threads: usize, loops: usize, tests: usize) -> TestSet {
+    // Get CPU information
+    let core_ids = core_affinity::get_core_ids().unwrap();
+    if num_threads > core_ids.len() {
+        panic!("Requested more threads than there are CPU cores");
+    }
+
     let mut thread_stats = vec![];
     let set_timer = Instant::now();
     for _ in 0..tests {
         let sw = Instant::now();
         let mut threads = Vec::new();
         for idx in 0..num_threads {
+            let core = core_ids[idx];
+
             let t = thread::spawn(move || {
+                //core_affinity::set_for_current(core);
+
                 let (v, t) = work(loops);
                 (idx, v, t)
             });
