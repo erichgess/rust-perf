@@ -5,10 +5,17 @@ fn main() {
     let loops = 100_000_000;
 
     for threads in 1..=8 {
+        // As threads are added to the test, evenly split the total number of iterations
+        // across all threads, so that 1 thread test can be compared to 4 thread test.
+        // For `threads` that are not divisors of `loops` some threads may have one more
+        // iteration than the others but that will be 1 out of 10,000,000 and should have
+        // negligible effect on the run time.
         n_threads(threads, loops / threads);
     }
 }
 
+/// Have `num_threads` threads each run a function that will
+/// iterate a computation `loops` times.
 fn n_threads(num_threads: usize, loops: usize) {
     let sw = Instant::now();
 
