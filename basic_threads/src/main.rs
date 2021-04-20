@@ -13,10 +13,10 @@ fn n_threads(num_threads: usize, loops: usize) {
     let sw = Instant::now();
 
     let mut threads = Vec::new();
-    for idx in 0..num_threads {
+    for _ in 0..num_threads {
         let t = thread::spawn(move || {
             let v = work(loops);
-            (idx, v)
+            v
         });
         threads.push(t);
     }
